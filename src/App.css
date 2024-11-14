@@ -28,7 +28,7 @@ body, html {
 }
 
 .App {
-  padding-top: 6rem;  /* Adiciona espaço para evitar sobreposição do conteúdo pelo cabeçalho fixo */
+  padding-top: 8rem;  /* Adiciona espaço para evitar sobreposição do conteúdo pelo cabeçalho fixo */
 }
 
 .App-header h1 {
@@ -42,19 +42,31 @@ body, html {
   width: 50%;  /* Ajustado para tela cheia */
 }
 
+.content {
+  display: flex;
+}
+
+.filter-sidebar {
+  width: 250px;
+  padding: 1rem;
+  position: fixed;  /* Mantém o filtro fixo ao lado da tela */
+  top: 8rem;  /* Ajusta a posição para evitar sobreposição do cabeçalho */
+  bottom: 0;
+  overflow-y: auto;
+  background-color: #f9f9f9;
+  border-right: 1px solid #ddd;
+}
+
 .category-dropdown {
-  position: relative;
-  display: inline-block;
   margin: 1.5rem 0;
 }
 
 .dropdown-menu {
   display: flex;
   flex-direction: column;
-  position: absolute;
   background-color: white;
   border: 1px solid #ccc;
-  width: 200px;
+  width: 100%;
   z-index: 1;
 }
 
@@ -70,35 +82,22 @@ body, html {
   background-color: #f1f1f1;
 }
 
-.category-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin: 1.5rem 0;
-  flex-wrap: wrap;
+.filter-options {
+  margin-top: 2rem;
 }
 
-.category-buttons button {
-  padding: 0.5rem 1.2rem;
-  background-color: #f0c14b;
-  border: 1px solid #a88734;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.category-buttons button:hover {
-  background-color: #e2b347;
+.filter-options label {
+  display: block;
+  margin: 1rem 0;
 }
 
 .product-grid {
   display: grid;
   gap: 1rem;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(3, 1fr);  /* Define 3 produtos por linha */
   padding: 2rem;
-  width: 100%;
-  max-width: 1440px;  /* Limita a largura em telas muito grandes */
-  margin: 0 auto;  /* Centraliza no desktop */
+  margin-left: 270px;  /* Espaço para o filtro fixo */
+  width: calc(100% - 270px);
 }
 
 .product-card {
@@ -108,13 +107,17 @@ body, html {
   text-align: center;
   transition: box-shadow 0.3s;
   background-color: #fff;
-  position: relative;  /* Garante que cada cartão de produto respeite seu próprio espaço */
 }
 
 .product-card img {
   width: 100%;
-  max-height: 200px;  /* Ajusta a altura máxima para aumentar o tamanho da imagem */
+  max-height: 200px;  /* Ajusta a altura máxima da imagem */
   object-fit: cover;  /* Garante que a imagem se ajuste bem ao espaço sem distorcer */
+}
+
+.product-card h2 {
+  font-size: 1rem;  /* Diminui o tamanho da fonte do título */
+  margin: 0.5rem 0;
 }
 
 .product-card:hover {
