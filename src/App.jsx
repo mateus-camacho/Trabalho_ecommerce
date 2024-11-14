@@ -4,7 +4,7 @@ import './App.css';
 function ProductCard({ product }) {
   return (
     <div className="product-card">
-      <img src={product.images[0]?.thumb} alt={product.title} />
+      <img src={product.images[0]?.large} alt={product.title} />
       <h2>{product.title}</h2>
       <p className="average-rating">Rating: {product.average_rating}</p>
       <p className="price">${product.price}</p>
