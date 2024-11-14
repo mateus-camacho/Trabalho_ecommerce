@@ -59,8 +59,8 @@ function App() {
   };
 
   const handlePriceChange = (e) => {
-    const [min, max] = e.target.value.split(',').map(Number);
-    setPriceFilter([min, max]);
+    const value = e.target.value.split(',').map(Number);
+    setPriceFilter(value);
   };
 
   const handleRatingChange = (e) => {
@@ -106,7 +106,16 @@ function App() {
                 value={priceFilter.join(',')}
                 onChange={handlePriceChange}
                 step="1"
+                list="price-steps"
               />
+              <datalist id="price-steps">
+                <option value="0"></option>
+                <option value="20"></option>
+                <option value="40"></option>
+                <option value="60"></option>
+                <option value="80"></option>
+                <option value="100"></option>
+              </datalist>
               <span>{`$${priceFilter[0]} - $${priceFilter[1]}`}</span>
             </label>
             <label>

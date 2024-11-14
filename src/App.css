@@ -24,11 +24,11 @@ body, html {
   width: 100%;
   position: fixed;
   top: 0;
-  z-index: 1000;
+  z-index: 1000;  /* Certifica-se de que o cabeçalho esteja sempre visível */
 }
 
 .App {
-  padding-top: 8rem;
+  padding-top: 8rem;  /* Espaço suficiente para evitar sobreposição */
 }
 
 .App-header h1 {
@@ -96,7 +96,7 @@ body, html {
   gap: 1rem;
   grid-template-columns: repeat(3, 1fr);
   padding: 2rem;
-  margin-left: 270px;
+  margin-left: 270px;  /* Espaço para o filtro fixo */
   width: calc(100% - 270px);
 }
 
@@ -107,6 +107,9 @@ body, html {
   text-align: center;
   transition: box-shadow 0.3s;
   background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;  /* Garante que os itens no cartão fiquem alinhados */
 }
 
 .product-card img {
