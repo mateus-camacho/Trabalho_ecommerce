@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
+const categories = [
+  'Industrial & Scientific', 'Buy a Kindle', 'Amazon Home', 'Books',
+  'Sports & Outdoors', 'Automotive', 'Movies & TV', 'Home Audio & Theater',
+  'Musical Instruments', 'Software', 'Cell Phones & Accessories', 'Video Games',
+  'Portable Audio & Accessories', 'Toys & Games', 'Tools & Home Improvement',
+  'Computers', 'Office Products', 'All Electronics'
+];
+
 function ProductCard({ product }) {
   return (
     <div className="product-card">
@@ -16,10 +24,9 @@ function ProductCard({ product }) {
 function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [category, setCategory] = useState('All');
-  const [priceFilter, setPriceFilter] = useState([0, 100]); // Filtro de preço inicial
-  const [ratingFilter, setRatingFilter] = useState(0); // Filtro de nota inicial
+  const [priceFilter, setPriceFilter] = useState([0, 100]);
+  const [ratingFilter, setRatingFilter] = useState(0);
   const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
@@ -34,19 +41,7 @@ function App() {
       }
     };
 
-    const fetchCategories = async () => {
-      try {
-        const response = await fetch('http://localhost:3001/api/categories');
-        const data = await response.json();
-        setCategories(data);
-        console.log(data);
-      } catch (error) {
-        console.error('Erro ao buscar categorias:', error);
-      }
-    };
-
     fetchProducts();
-    fetchCategories();
   }, []);
 
   const filteredProducts = products.filter(product =>
@@ -64,8 +59,8 @@ function App() {
   };
 
   const handlePriceChange = (e) => {
-    const value = e.target.value.split(',').map(Number);
-    setPriceFilter(value);
+    const [min, max] = e.target.value.split(',').map(Number);
+    setPriceFilter([min, max]);
   };
 
   const handleRatingChange = (e) => {
@@ -94,8 +89,8 @@ function App() {
               <div className="dropdown-menu">
                 <button onClick={() => handleCategorySelect('All')}>Todos</button>
                 {categories.map((cat, index) => (
-                  <button key={index} onClick={() => handleCategorySelect(cat.main_category)}>
-                    {cat.main_category}
+                  <button key={index} onClick={() => handleCategorySelect(cat)}>
+                    {cat}
                   </button>
                 ))}
               </div>

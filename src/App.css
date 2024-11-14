@@ -22,13 +22,13 @@ body, html {
   color: #fff;
   padding: 1.5rem;
   width: 100%;
-  position: fixed;  /* Mantém o cabeçalho fixo no topo */
+  position: fixed;
   top: 0;
-  z-index: 1000;  /* Garante que o cabeçalho fique acima de outros elementos */
+  z-index: 1000;
 }
 
 .App {
-  padding-top: 8rem;  /* Adiciona espaço para evitar sobreposição do conteúdo pelo cabeçalho fixo */
+  padding-top: 8rem;
 }
 
 .App-header h1 {
@@ -39,7 +39,7 @@ body, html {
   padding: 0.5rem;
   font-size: 1rem;
   margin-top: 0.5rem;
-  width: 50%;  /* Ajustado para tela cheia */
+  width: 50%;
 }
 
 .content {
@@ -49,8 +49,8 @@ body, html {
 .filter-sidebar {
   width: 250px;
   padding: 1rem;
-  position: fixed;  /* Mantém o filtro fixo ao lado da tela */
-  top: 8rem;  /* Ajusta a posição para evitar sobreposição do cabeçalho */
+  position: fixed;
+  top: 8rem;
   bottom: 0;
   overflow-y: auto;
   background-color: #f9f9f9;
@@ -94,9 +94,9 @@ body, html {
 .product-grid {
   display: grid;
   gap: 1rem;
-  grid-template-columns: repeat(3, 1fr);  /* Define 3 produtos por linha */
+  grid-template-columns: repeat(3, 1fr);
   padding: 2rem;
-  margin-left: 270px;  /* Espaço para o filtro fixo */
+  margin-left: 270px;
   width: calc(100% - 270px);
 }
 
@@ -111,12 +111,12 @@ body, html {
 
 .product-card img {
   width: 100%;
-  max-height: 200px;  /* Ajusta a altura máxima da imagem */
-  object-fit: cover;  /* Garante que a imagem se ajuste bem ao espaço sem distorcer */
+  max-height: 200px;
+  object-fit: cover;
 }
 
 .product-card h2 {
-  font-size: 1rem;  /* Diminui o tamanho da fonte do título */
+  font-size: 1rem;
   margin: 0.5rem 0;
 }
 
