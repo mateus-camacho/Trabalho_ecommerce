@@ -6,7 +6,7 @@ function ProductCard({ product }) {
     <div className="product-card">
       <img src={product.images[0]?.thumb} alt={product.title} />
       <h2>{product.title}</h2>
-      <p>{product.description[0]}</p>
+      <p className="average-rating">Rating: {product.average_rating}</p>
       <p className="price">${product.price}</p>
       <button>Adicionar ao carrinho</button>
     </div>
@@ -23,9 +23,10 @@ function App() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('http://localhost:3001/');
+        const response = await fetch('http://localhost:3001');
         const data = await response.json();
         setProducts(data);
+        console.log(data);  // Verifique os dados recebidos aqui
       } catch (error) {
         console.error('Erro ao buscar produtos:', error);
       }
@@ -33,10 +34,10 @@ function App() {
 
     const fetchCategories = async () => {
       try {
-        const response = await fetch('http://localhost:3001/');
+        const response = await fetch('http://localhost:3001/api/categories');
         const data = await response.json();
         setCategories(data);
-        console.log(data);
+        console.log(data);  // Verifique os dados recebidos aqui
       } catch (error) {
         console.error('Erro ao buscar categorias:', error);
       }
