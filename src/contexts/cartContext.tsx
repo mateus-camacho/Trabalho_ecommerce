@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import { Cart } from "../core/models/cart.model";
-import { Product } from "@/core/models/product.model";
 import { CatalogService } from "@/core/services/catalog.service";
 import { CartService } from "@/core/services/cart.service";
 
