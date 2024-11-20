@@ -36,20 +36,16 @@ export function CatalogService() {
 
   const getProduct = async (id: string): Promise<Product> => {
     const response = await api.get<Product>(`/catalog/${id}`);
-
     return response.data;
   };
 
   const getCategories = async (): Promise<string[]> => {
-    console.log(process);
     const response = await api.get<string[]>(`/categories`);
-
     return response.data;
   };
 
   const getBrands = async (): Promise<string[]> => {
     const response = await api.get<string[]>(`/brands`);
-
     return response.data;
   };
 
