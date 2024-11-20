@@ -4,7 +4,7 @@ import axios from "axios";
 export function useApi() {
   //   const { token } = useAuth();
   const api = axios.create({
-    baseURL: process.env.API_URL || "http://localhost:3000",
+    baseURL: "https://nosql-trab.vercel.app",
     headers: {
       //   Authorization: `Bearer ${token}`,
     },
