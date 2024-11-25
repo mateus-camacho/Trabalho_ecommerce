@@ -1,12 +1,9 @@
-import { Menu, CircleUserRound } from "lucide-react";
+import { Menu } from "lucide-react";
 import Search from "./search";
 import Cart from "./cart";
+import Avatar from "./avatar";
 
 export default function Header() {
-  const handleOpenUser = () => {
-    console.log("opening user...");
-  };
-
   const handleOpenMenu = () => {
     console.log("opening menu...");
   };
@@ -27,12 +24,7 @@ export default function Header() {
 
           <div className="w-full h-full flex items-end justify-end gap-4 text-white col-span-1">
             <Cart />
-            <button
-              className="h-7 w-7 transition-colors duration-300 hover:text-gray-300 flex items-center justify-center"
-              onClick={handleOpenUser}
-            >
-              <CircleUserRound size={20} />
-            </button>
+            <Avatar />
           </div>
         </div>
 
