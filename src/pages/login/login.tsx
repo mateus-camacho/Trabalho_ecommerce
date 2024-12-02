@@ -1,3 +1,4 @@
+import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -26,6 +27,7 @@ const loginSchema = z.object({
 
 export default function Login() {
     const [showPass, setShowPass] = useState(false)
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     const loginForm = useForm({
         resolver: zodResolver(loginSchema),
@@ -33,10 +35,17 @@ export default function Login() {
 
     const { handleSubmit, reset } = loginForm;
 
-    const handleLogin = (data: any) => {
-        console.log('data', data)
-        reset();
-    }
+    const handleLogin = async (data: any) => {
+        try {
+            const response = await axios.post("http://localhost:3000/login", data);
+            console.log("Login bem-sucedido:", response.data);
+            reset();
+            // Redirecionar ou armazenar token se necessário
+        } catch (error: any) {
+            console.error("Erro no login:", error);
+            setErrorMessage(error.response?.data?.message || "Erro inesperado!");
+        }
+    };
 
     return (
         <Form {...loginForm}>

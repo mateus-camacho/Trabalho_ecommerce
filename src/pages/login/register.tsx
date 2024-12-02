@@ -1,5 +1,5 @@
+import axios from "axios";
 import { useState } from "react";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -46,17 +46,23 @@ const registerSchema = z.object({
 
 export default function Register() {
     const [showPass, setShowPass] = useState(false)
-
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const registerForm = useForm({
         resolver: zodResolver(registerSchema),
     });
 
     const { handleSubmit, reset } = registerForm;
 
-    const handleRegister = (data: any) => {
-        console.log('data', data)
-        reset();
-    }
+    const handleRegister = async (data: any) => {
+        try {
+            const response = await axios.post("http://localhost:3000/register", data);
+            console.log("Registro bem-sucedido:", response.data);
+            reset();
+        } catch (error: any) {
+            console.error("Erro no registro:", error);
+            setErrorMessage(error.response?.data?.message || "Erro inesperado!");
+        }
+    };
 
     return (
         <Form {...registerForm}>
