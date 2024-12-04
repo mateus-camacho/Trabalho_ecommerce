@@ -18,12 +18,46 @@ import { ScrollArea } from "../ui/scroll-area";
 import { Button } from "../ui/button";
 import { ShoppingBag, Trash } from "lucide-react";
 import { useCart } from "@/contexts/cartContext";
+import axios from "axios";
+import { useState } from "react";
 
 export default function Cart() {
   const { cart, removeFromCart } = useCart();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleRemoveItem = (id: string) => {
     removeFromCart(id);
+  };
+
+  const handleCheckout = async () => {
+    try {
+      const token = sessionStorage.getItem('token');
+
+      if (!token) {
+        throw new Error("Token não encontrado. Faça login novamente.");
+      }
+
+      // Configurando o cabeçalho com o token
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      // Enviando a requisição com o token nos cabeçalhos
+      const response = await axios.post(
+        "http://localhost:3000/cart/checkout",
+        { cart }, // Payload da requisição
+        config // Cabeçalhos da requisição
+      );
+
+      console.log("Compra feita:", response.data);
+      setErrorMessage(null);
+      alert("Compra realizada com sucesso!");
+    } catch (error: any) {
+      console.error("Erro no checkout:", error);
+      setErrorMessage(error.response?.data?.message || "Erro inesperado!");
+    }
   };
 
   return (
@@ -124,10 +158,16 @@ export default function Cart() {
                   </span>
                 </div>
 
-                <Button variant="default">Checkout</Button>
+                <Button variant="default" onClick={handleCheckout}>
+                  Checkout
+                </Button>
               </div>
             </ScrollArea>
           </>
+        )}
+
+        {errorMessage && (
+          <div className="text-red-500 text-sm mt-4">{errorMessage}</div>
         )}
       </SheetContent>
     </Sheet>
