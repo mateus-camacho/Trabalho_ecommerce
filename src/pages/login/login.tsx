@@ -39,6 +39,9 @@ export default function Login() {
         try {
             const response = await axios.post("http://localhost:3000/login", data);
             console.log("Login bem-sucedido:", response.data);
+            const token = response.data.token;
+            sessionStorage.setItem('token', token);
+            setErrorMessage("Login realizado com sucesso");
             reset();
             // Redirecionar ou armazenar token se necessário
         } catch (error: any) {
@@ -111,6 +114,9 @@ export default function Login() {
                 <Button className="mt-4 mx-auto w-full max-w-80" type="submit">
                     entrar
                 </Button>
+                {errorMessage && (
+                    <p className="text-red-500 text-sm mt-2">{errorMessage}</p>)
+                }
             </form>
         </Form>
     )

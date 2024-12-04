@@ -57,7 +57,9 @@ export default function Register() {
         try {
             const response = await axios.post("http://localhost:3000/register", data);
             console.log("Registro bem-sucedido:", response.data);
+            setErrorMessage("Cadastro realizado com sucesso");
             reset();
+            
         } catch (error: any) {
             console.error("Erro no registro:", error);
             setErrorMessage(error.response?.data?.message || "Erro inesperado!");
@@ -186,6 +188,9 @@ export default function Register() {
                 <Button className="mt-4 mx-auto w-full max-w-80" type="submit">
                     criar minha conta
                 </Button>
+                {errorMessage && (
+                    <p className="text-red-500 text-sm mt-2">{errorMessage}</p>)
+                }
             </form>
         </Form>
     )
