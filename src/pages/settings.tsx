@@ -1,8 +1,3 @@
-
-
-
 export default function Settings() {
-    return (
-        <p>a</p>
-    )
+  return <p>a</p>;
 }

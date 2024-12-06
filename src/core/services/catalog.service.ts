@@ -1,3 +1,4 @@
+import { useAuth } from "@/contexts/authContext";
 import { useApi } from "../../hooks/use-api";
 import { Product } from "../models/product.model";
 
@@ -15,6 +16,8 @@ export interface GetProductsRequest {
 
 export function CatalogService() {
   const api = useApi();
+
+  const { isAuthenticated, token, tokenIsExpired } = useAuth();
 
   const getProducts = async (
     request: GetProductsRequest
@@ -49,10 +52,32 @@ export function CatalogService() {
     return response.data;
   };
 
+  const searchProducts = async (query: string): Promise<Product[]> => {
+    const response = await api.get<Product[]>(
+      `/catalog/search/query?query=${query}`
+    );
+    return response.data;
+  };
+
+  const getRecommendedProducts = async (): Promise<Product[]> => {
+    const headers: any = {};
+
+    if (isAuthenticated() && !tokenIsExpired()) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+
+    const response = await api.get<Product[]>(`/catalog/recommendations/user`, {
+      headers: headers,
+    });
+    return response.data;
+  };
+
   return {
     getProducts,
     getProduct,
     getCategories,
     getBrands,
+    searchProducts,
+    getRecommendedProducts,
   };
 }

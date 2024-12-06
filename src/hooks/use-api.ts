@@ -1,13 +1,16 @@
 import axios from "axios";
-// import { useAuth } from "./useAuth";
 
 export function useApi() {
-  //   const { token } = useAuth();
+  let url = null;
+
+  try {
+    url = process.env.API_URL;
+  } catch (error) {
+    console.log(error);
+  }
+
   const api = axios.create({
-    baseURL: "https://nosql-trab.vercel.app",
-    headers: {
-      //   Authorization: `Bearer ${token}`,
-    },
+    baseURL: url ?? "https://nosql-trab.vercel.app",
   });
 
   return api;
