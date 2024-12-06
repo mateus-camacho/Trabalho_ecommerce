@@ -1,13 +1,9 @@
-import { Menu } from "lucide-react";
 import Search from "./search";
 import Cart from "./cart";
 import Avatar from "./avatar";
+import { Menu } from "./menu";
 
 export default function Header() {
-  const handleOpenMenu = () => {
-    console.log("opening menu...");
-  };
-
   return (
     <header className="w-full bg-[#232f3e] shadow">
       <div className="w-full max-w-[1400px] mx-auto px-4 flex flex-col items-center">
@@ -23,19 +19,13 @@ export default function Header() {
           </div>
 
           <div className="w-full h-full flex items-end justify-end gap-4 text-white col-span-1">
-            <Cart />
             <Avatar />
+            <Cart />
           </div>
         </div>
 
         <div className="w-full">
-          <button
-            className="h-9 px-2 flex items-center gap-2 text-white text-sm transition-colors duration-300 hover:text-gray-300"
-            onClick={handleOpenMenu}
-          >
-            <Menu size={20} />
-            <span>menu</span>
-          </button>
+          <Menu />
         </div>
       </div>
     </header>

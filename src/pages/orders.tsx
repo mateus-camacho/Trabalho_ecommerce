@@ -1,7 +1,3 @@
-
-
 export default function Orders() {
-    return (
-        <p>orders</p>
-    )
+  return <p>orders</p>;
 }

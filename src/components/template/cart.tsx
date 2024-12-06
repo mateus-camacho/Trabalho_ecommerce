@@ -18,46 +18,25 @@ import { ScrollArea } from "../ui/scroll-area";
 import { Button } from "../ui/button";
 import { ShoppingBag, Trash } from "lucide-react";
 import { useCart } from "@/contexts/cartContext";
-import axios from "axios";
-import { useState } from "react";
+import { LoaderCircle } from "lucide-react";
+import { OrderService } from "@/core/services/order.service";
 
 export default function Cart() {
-  const { cart, removeFromCart } = useCart();
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { cartId, cart, loading, removeFromCart } = useCart();
+  const orderService = OrderService();
 
   const handleRemoveItem = (id: string) => {
     removeFromCart(id);
   };
 
   const handleCheckout = async () => {
-    try {
-      const token = sessionStorage.getItem('token');
+    console.log("Checkout");
+    console.log(cart);
+    console.log(cartId);
 
-      if (!token) {
-        throw new Error("Token não encontrado. Faça login novamente.");
-      }
-
-      // Configurando o cabeçalho com o token
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      // Enviando a requisição com o token nos cabeçalhos
-      const response = await axios.post(
-        "http://localhost:3000/cart/checkout",
-        { cart }, // Payload da requisição
-        config // Cabeçalhos da requisição
-      );
-
-      console.log("Compra feita:", response.data);
-      setErrorMessage(null);
-      alert("Compra realizada com sucesso!");
-    } catch (error: any) {
-      console.error("Erro no checkout:", error);
-      setErrorMessage(error.response?.data?.message || "Erro inesperado!");
-    }
+    await orderService.checkout({
+      cartId,
+    });
   };
 
   return (
@@ -158,16 +137,25 @@ export default function Cart() {
                   </span>
                 </div>
 
-                <Button variant="default" onClick={handleCheckout}>
-                  Checkout
+                <Button
+                  variant="default"
+                  onClick={handleCheckout}
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <>
+                      <LoaderCircle
+                        size={14}
+                        className="text-blue-500 animate-spin"
+                      />
+                    </>
+                  ) : (
+                    "Checkout"
+                  )}
                 </Button>
               </div>
             </ScrollArea>
           </>
-        )}
-
-        {errorMessage && (
-          <div className="text-red-500 text-sm mt-4">{errorMessage}</div>
         )}
       </SheetContent>
     </Sheet>

@@ -3,6 +3,7 @@ import { Details } from "./details.model";
 
 export interface Product {
   _id: string;
+  id: string;
   main_category: string;
   title: string;
   average_rating: number;
@@ -17,4 +18,5 @@ export interface Product {
   details: Details;
   parent_asin: string;
   bought_together: any;
+  stock: number;
 }

@@ -31,6 +31,8 @@ import { Label } from "@/components/ui/label";
 import { CatalogService } from "@/core/services/catalog.service";
 import { useCart } from "@/contexts/cartContext";
 
+import { useWebsocket } from "@/hooks/use-websocket";
+
 const filterSchema = z.object({
   categories: z.array(z.string()).optional(),
   brands: z.array(z.string()).optional(),
@@ -129,6 +131,36 @@ function Home() {
   useEffect(() => {
     console.log(cart);
   }, [cart]);
+
+  useEffect(() => {
+    if (products.length === 0) return;
+
+    const websocket = useWebsocket();
+
+    websocket.onmessage = (event) => {
+      const data = JSON.parse(event.data) as {
+        type: string;
+        productId: string;
+        quantity: number;
+      };
+
+      if (data.type === "update_stock") {
+        const updatedProducts = products.map((product) => {
+          if (product._id === data.productId) {
+            return {
+              ...product,
+              stock: product.stock - data.quantity,
+            };
+          }
+
+          return product;
+        });
+
+        console.log(updatedProducts);
+        setProducts(updatedProducts);
+      }
+    };
+  }, [products]);
 
   return (
     <div className="w-full flex flex-col gap-4 mt-4 ">
@@ -245,7 +277,7 @@ function Home() {
           <div className="grid place-items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {loading
               ? Array.from({ length: 10 }).map((_, index) => (
-                  <ProductCard key={index} loading={loading} />
+                  <ProductCard key={index} loadingProduct={loading} />
                 ))
               : products.map((product, index) => (
                   <ProductCard key={index} product={product} />
