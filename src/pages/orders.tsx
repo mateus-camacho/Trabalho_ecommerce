@@ -3,61 +3,165 @@ import { Product } from "@/core/models/product.model";
 import { HistoryService } from "@/core/services/history.service";
 
 import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/authContext";
+import { LoaderCircle } from "lucide-react";
 
 export default function Orders() {
-    const [purchases, setPurchases] = useState<{
-        purchaseId: number;
-        data: Date;
-        valor: number;
-        products: Product[];
-    }[]>([]); 
+  const { user } = useAuth();
 
-    const userId = "123"; 
-
-    useEffect(() => 
+  const [loading, setLoading] = useState(true);
+  const [purchases, setPurchases] = useState<
     {
-        const fetchPurchases = async () =>
-        {
-            try 
-            {
-                const service = HistoryService();
-                const data = await service.getPurchases(userId); 
-                setPurchases(data); 
-            } catch (error) {
-                console.error("Erro ao buscar o histórico de compras:", error);
-            }
-        };
+      id: number;
+      data: Date;
+      valor: number;
+      itens: {
+        quantidade: number;
+        product: Product;
+      }[];
+    }[]
+  >([]);
 
-        fetchPurchases(); 
-    }, [userId]);
+  useEffect(() => {
+    if (!user || !user.id) return;
 
-    return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="flex flex-col w-full max-w-2xl bg-white p-8 rounded-lg shadow">
-                <h1>Histórico de Compras</h1>
-                {purchases.length === 0 ? (
-                    <p>Nenhuma compra encontrada.</p>
-                ) : (
-                    <ul>
-                        {purchases.map((purchase) => (
-                            <li key={purchase.purchaseId}>
-                                <strong>ID da Compra:</strong> {purchase.purchaseId}<br />
-                                <strong>Data:</strong> {new Date(purchase.data).toLocaleDateString()}<br />
-                                <strong>Valor:</strong> R$ {purchase.valor.toFixed(2)}<br />
-                                <strong>Produtos:</strong>
-                                <ul>
-                                    {purchase.products.map((product) => (
-                                        <li key={product._id}>{product.title}</li>
-                                    ))}
-                                </ul>
-                            </li>
-                        ))}
-                    </ul>
-                )}
-                <Link to="/" className="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                    Voltar
-                </Link>
-            </div>
-        </div>
-    );
+    const userId = user.id;
+
+    const fetchPurchases = async () => {
+      try {
+        const service = HistoryService();
+        const data = await service.getPurchases(userId);
+        console.log(data);
+        setPurchases(data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Erro ao buscar o histórico de compras:", error);
+      }
+    };
+
+    fetchPurchases();
+  }, [user]);
+
+  return (
+    <div className="w-full h-full min-h-[700px] my-auto flex flex-col">
+      {loading ? (
+        <LoaderCircle size={60} className="text-blue-500 animate-spin m-auto" />
+      ) : (
+        <>
+          <h1 className="text-2xl font-bold text-gray-600 mb-4 mt-6">
+            Histórico de Compras
+          </h1>
+          {purchases.length === 0 ? (
+            <p className="text-gray-600">Nenhuma compra encontrada.</p>
+          ) : (
+            purchases.map((purchase) => (
+              <div
+                key={purchase.id}
+                className="flex flex-col border border-gray-200 bg-white p-4 rounded-md shadow-sm mb-4"
+              >
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-base font-bold text-gray-600">
+                    {new Date(purchase.data).toLocaleDateString("pt-BR", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                    })}
+                  </h2>
+                  <p className="text-gray-600">
+                    Total:{" "}
+                    {new Intl.NumberFormat("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                    }).format(purchase.valor)}
+                  </p>
+                </div>
+
+                <div className="w-full flex flex-col gap-2">
+                  {purchase.itens.map((item) => (
+                    <Link
+                      to={`/product/${purchase.itens[0].product.id}`}
+                      className="text-blue-500 font-semibold hover:underline"
+                    >
+                      <div className="w-full flex gap-4">
+                        <span className="min-w-20 h-20 bg-gray-50">
+                          <img
+                            src={
+                              item.product.images[0].hi_res ??
+                              item.product.images[0].large ??
+                              item.product.images[0].thumb
+                            }
+                            alt={item.product.title}
+                            className="w-20 h-20 rounded-sm object-contain"
+                          />
+                        </span>
+
+                        <div className="flex items-center justify-between w-full">
+                          <span className="flex flex-col gap-1">
+                            <span className="text-sm text-gray-800">
+                              {item.product.title.length > 40
+                                ? item.product.title.substring(0, 40) + "..."
+                                : item.product.title}
+                            </span>
+                            <span className="text-xs text-gray-600">
+                              {item.product.main_category}
+                            </span>
+                          </span>
+
+                          <span className="text-sm text-muted-foreground">
+                            {item.quantidade}
+                            {" X "}
+                            {new Intl.NumberFormat("pt-BR", {
+                              style: "currency",
+                              currency: "BRL",
+                            }).format(item.product.price)}
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+
+                {/* <div className="flex flex-col">
+                  {purchase.itens.map((item) => (
+                    <div
+                      key={item.product.id}
+                      className="flex items-center justify-between border-b border-gray-200 py-2"
+                    >
+                      <div className="flex items-center">
+                        <img
+                          src={
+                            item.product?.images.length
+                              ? item.product?.images[0].hi_res ??
+                                item.product?.images[0].large ??
+                                item.product?.images[0].thumb
+                              : ""
+                          }
+                          alt={item.product?.title}
+                          className="w-16 h-16 object-contain rounded-md"
+                        />
+                        <div className="ml-4">
+                          <Link
+                            to={`/product/${item.product.id}`}
+                            className="text-blue-500 font-semibold"
+                          >
+                            {item.product.title.length > 55
+                              ? item.product.title.slice(0, 55) + "..."
+                              : item.product.title}
+                          </Link>
+                          <p className="text-gray-600">
+                            Quantidade: {item.quantidade}
+                          </p>
+                        </div>
+                      </div>
+                      <p className="text-gray-600">R$ {item.product.price}</p>
+                    </div>
+                  ))}
+                </div> */}
+              </div>
+            ))
+          )}
+        </>
+      )}
+    </div>
+  );
 }
