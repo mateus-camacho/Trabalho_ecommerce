@@ -11,6 +11,9 @@ export function useApi() {
 
   const api = axios.create({
     baseURL: url ?? "https://nosql-trab.vercel.app",
+    headers: {
+      "ngrok-skip-browser-warning": "true",
+    },
   });
 
   return api;

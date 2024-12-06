@@ -54,9 +54,9 @@ export default function Orders() {
           {purchases.length === 0 ? (
             <p className="text-gray-600">Nenhuma compra encontrada.</p>
           ) : (
-            purchases.map((purchase) => (
+            purchases.map((purchase, index) => (
               <div
-                key={purchase.id}
+                key={`purchase-${index}-${purchase.id}`}
                 className="flex flex-col border border-gray-200 bg-white p-4 rounded-md shadow-sm mb-4"
               >
                 <div className="flex justify-between items-center mb-4">
@@ -79,6 +79,7 @@ export default function Orders() {
                 <div className="w-full flex flex-col gap-2">
                   {purchase.itens.map((item) => (
                     <Link
+                      key={`purchase-${index}-${item.product.id}`}
                       to={`/product/${purchase.itens[0].product.id}`}
                       className="text-blue-500 font-semibold hover:underline"
                     >
@@ -120,43 +121,6 @@ export default function Orders() {
                     </Link>
                   ))}
                 </div>
-
-                {/* <div className="flex flex-col">
-                  {purchase.itens.map((item) => (
-                    <div
-                      key={item.product.id}
-                      className="flex items-center justify-between border-b border-gray-200 py-2"
-                    >
-                      <div className="flex items-center">
-                        <img
-                          src={
-                            item.product?.images.length
-                              ? item.product?.images[0].hi_res ??
-                                item.product?.images[0].large ??
-                                item.product?.images[0].thumb
-                              : ""
-                          }
-                          alt={item.product?.title}
-                          className="w-16 h-16 object-contain rounded-md"
-                        />
-                        <div className="ml-4">
-                          <Link
-                            to={`/product/${item.product.id}`}
-                            className="text-blue-500 font-semibold"
-                          >
-                            {item.product.title.length > 55
-                              ? item.product.title.slice(0, 55) + "..."
-                              : item.product.title}
-                          </Link>
-                          <p className="text-gray-600">
-                            Quantidade: {item.quantidade}
-                          </p>
-                        </div>
-                      </div>
-                      <p className="text-gray-600">R$ {item.product.price}</p>
-                    </div>
-                  ))}
-                </div> */}
               </div>
             ))
           )}
